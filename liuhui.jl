@@ -1,6 +1,10 @@
 using MTH229
 using Plots
 
+#################
+##ROOTS FINDING##
+#################
+
 function bisec(f::Function, x1::Number, x2::Number, e::AbstractFloat=1e-7, max::Integer=100)
     fx1 = f(x1)
     fx2 = f(x2)
@@ -96,4 +100,32 @@ function newrap(f::Function, x0::Number, maxiter::Integer, tol::AbstractFloat=1e
         x0 = xk
         return xk
     end
+end
+
+###########################
+###NUMERICAL INTEGRATION###
+###########################
+
+#################
+##EDO SOLUTION###
+#################
+function rk4(f::Function, xn::AbstractFloat, x0::Number, y0::Number, n::Integer)
+    h = (xn-x0)/n
+    @sprintf("solution")
+    i=0
+    while i < n
+        i += 1
+        k1 = h * (f(x0,y0))
+        k2 = h * (f((x0+h/2), (y0+k1/2)))
+        k3 = h * (f((x0+h/2), (y0+k2/2)))
+        k4 = h * (f((x0+h), (y0+k3)))
+        k =  (k1+2*k2+2*k3+k4)/6
+        yn = y0 + k
+        @sprintf("--------------------------")
+        @sprintf("%.3f\t%.3f\t%.3f", x0,y0,yn)
+        y0 = yn
+        x0 = x0+h
+    @sprintf("\n x=%.3f, y=%3.f",xn,yn)
+    end
+    return xn,yn 
 end

@@ -109,23 +109,54 @@ end
 #################
 ##EDO SOLUTION###
 #################
-function rk4(f::Function, xn::AbstractFloat, x0::Number, y0::Number, n::Integer)
-    h = (xn-x0)/n
-    @sprintf("solution")
-    i=0
-    while i < n
-        i += 1
-        k1 = h * (f(x0,y0))
-        k2 = h * (f((x0+h/2), (y0+k1/2)))
-        k3 = h * (f((x0+h/2), (y0+k2/2)))
-        k4 = h * (f((x0+h), (y0+k3)))
-        k =  (k1+2*k2+2*k3+k4)/6
-        yn = y0 + k
-        @sprintf("--------------------------")
-        @sprintf("%.3f\t%.3f\t%.3f", x0,y0,yn)
-        y0 = yn
-        x0 = x0+h
-    @sprintf("\n x=%.3f, y=%3.f",xn,yn)
+#function rk4(f::Function, xn::AbstractFloat, x0::Number, y0::Number, n::Integer)
+#    h = (xn-x0)/n
+#    @sprintf("solution")
+#    i=0
+#    while i < n
+#        i += 1
+#        k1 = h * (f(x0,y0))
+#        k2 = h * (f((x0+h/2), (y0+k1/2)))
+#        k3 = h * (f((x0+h/2), (y0+k2/2)))
+#        k4 = h * (f((x0+h), (y0+k3)))
+#        k =  (k1+2*k2+2*k3+k4)/6
+#        yn = y0 + k
+#        @sprintf("--------------------------")
+#        @sprintf("%.3f\t%.3f\t%.3f", x0,y0,yn)
+#        y0 = yn
+#        x0 = x0+h
+#    @sprintf("\n x=%.3f, y=%3.f",xn,yn)
+#    end
+#    return xn,yn 
+#end
+
+#function rungekutta4(f, y0, t)
+#    n = length(t)
+#    y = zeros((n, length(y0)))
+#    y[1,:] = y0
+#    for i in 1:n-1
+#        h = t[i+1] - t[i]
+#        k1 = f(y[i,:], t[i])
+#        k2 = f(k1 * h/2 .+ y[i,:], h/2 .+ y[i,:])
+#        k3 = f(k2 * h/2 .+ y[i,:], h/2 .+ y[i,:])
+#        k4 = f(k3 * h .+ y[i,:], h .+ y[i,:])
+#        y[i+1,:] = (h/6) * (k1 .+ 2*k2 .+ 2*k3 .+ k4) .+ y[i,:]
+#    end
+#    return y
+#end
+
+function rgk4(dxdy, tn0, tnf, y0, n)
+    tn = LinRange(tn0, tnf, n+1)
+    y = zeros(n, length(y0))
+    y[1,:] = y0
+    for i in 1:n-1
+        j = i + 1
+        h = tn[j] - tn[i]
+        k1 = f(y[i,:], t[i])
+        k2 = f(k1 * h/2 .+ y[i,:], h/2 .+ y[i,:])
+        k3 = f(k2 * h/2 .+ y[i,:], h/2 .+ y[i,:])
+        k4 = f(k3 * h .+ y[i,:], h .+ y[i,:])
+        y[j,:] = (h/6) * (k1 .+ 2*k2 .+ 2*k3 .+ k4) .+ y[i,:]
     end
-    return xn,yn 
-end
+    return y
+end 
